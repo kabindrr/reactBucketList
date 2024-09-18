@@ -1,17 +1,10 @@
-
-
-
-
 export const Table = ({ bucketList, handleOnSwitch, handleOnDelete }) => {
   const entryList = bucketList.filter((item) => item.type === "entry");
 
   const badList = bucketList.filter((item) => item.type === "bad");
 
-
-
   return (
     <>
-   
       <div className="row mt-5" style={{ color: "red" }}>
         <div className="col-sm">
           <h3>Entry List</h3>

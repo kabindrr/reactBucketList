@@ -1,12 +1,17 @@
 import { useState } from "react";
 import "./App.css";
 import { Form } from "./components/Form";
+import { Button, Modal, Spinner } from "react-bootstrap";
+
 import { Table } from "./components/Table";
 import { ToastContainer, toast } from "react-toastify";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import "react-toastify/dist/ReactToastify.css";
 const totalBudget = 24000;
 
 const App = () => {
+  const [showModal, setShowModal] = useState(false);
   const [bucketList, setBucketList] = useState([]);
 
   const totalMoney = bucketList.reduce((acc, item) => {
@@ -14,20 +19,25 @@ const App = () => {
   }, 0);
 
   const addBucketList = (taskObj) => {
-    const obj = {
-      ...taskObj,
-      id: randomIdGenerator(),
-      type: "entry",
-    };
+    setShowModal(true);
 
-    if (totalMoney + Number(taskObj.money) > totalBudget) {
-      return toast.error(
-        "Not enough Budget available. Let go of some holiday destination"
-      );
-    }
+    setTimeout(() => {
+      const obj = {
+        ...taskObj,
+        id: randomIdGenerator(),
+        type: "entry",
+      };
+      if (totalMoney + Number(taskObj.money) > totalBudget) {
+        setShowModal(false);
+        return toast.error(
+          "Not enough Budget available. Let go of some holiday destination"
+        );
+      }
 
-    setBucketList([...bucketList, obj]);
-    toast.success("On your way to new Bucket");
+      setBucketList([...bucketList, obj]);
+      setShowModal(false);
+      toast.success("On your way to new Bucket");
+    }, 3000);
   };
 
   const randomIdGenerator = () => {
@@ -174,6 +184,29 @@ const App = () => {
         <div className="footer d-flex align-items-center justify-content-center">
           <div>Copy right reserved made by Kabi with fun</div>
         </div>
+
+        <Modal
+          show={showModal}
+          onHide={() => setShowModal(false)}
+          dialogClassName="modal-90w"
+          aria-labelledby="example-custom-modal-styling-title"
+        >
+          <Modal.Header style={{ backgroundColor: "green" }} closeButton>
+            <Modal.Title
+              id="example-custom-modal-styling-title"
+              className="w-100 text-center"
+            >
+              <h3 style={{ color: "orange" }} className="text-center">
+                Loading Please Wait ........
+              </h3>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="text-center">
+            <p>
+              <Spinner animation="grow" variant="success" />
+            </p>
+          </Modal.Body>
+        </Modal>
       </div>
     </>
   );
