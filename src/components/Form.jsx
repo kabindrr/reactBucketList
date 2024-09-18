@@ -10,9 +10,12 @@ export const Form = ({ addBucketList }) => {
   const handleOnSubmit = (e) => {
     e.preventDefault();
     addBucketList(form);
+    resetForm();
+  };
+  const resetForm = () => {
+    setForm({ bucketList: "", money: "" });
   };
 
- 
   return (
     <div>
       <form
@@ -28,6 +31,7 @@ export const Form = ({ addBucketList }) => {
               className="form-control"
               id="exampleFormControlInput1"
               placeholder="Bucket List"
+              value={form.bucketList ?? ""}
               onChange={handleOnChange}
             />
           </div>
@@ -39,6 +43,7 @@ export const Form = ({ addBucketList }) => {
               id="exampleFormControlInput1"
               placeholder="Money Reqired"
               min="100"
+              value={form.money ?? ""}
               onChange={handleOnChange}
             />
           </div>
