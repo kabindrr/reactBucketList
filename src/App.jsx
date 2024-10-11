@@ -36,8 +36,7 @@ const App = () => {
 
       setBucketList([...bucketList, obj]);
       setShowModal(false);
-      
-     
+
       toast.success("On your way to new Bucket");
     }, 3000);
   };

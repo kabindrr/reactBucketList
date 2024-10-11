@@ -34,18 +34,7 @@ export const Table = ({ bucketList, handleOnSwitch, handleOnDelete }) => {
                     style={{ border: "2px solid red" }}
                   >
                     <td>{1 + i}</td>
-                    <td>
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value="${
-                                  item?.id
-                                }"
-                        id=""
-                        onChange="handleOnSelect(this)"
-                      />
-                      {item.bucketList}
-                    </td>
+                    <td>{item.bucketList}</td>
                     <td>{item.money}</td>
                     <td className="text-end">
                       <button
@@ -92,18 +81,7 @@ export const Table = ({ bucketList, handleOnSwitch, handleOnDelete }) => {
                   style={{ border: "2px solid red" }}
                 >
                   <td>{1 + i}</td>
-                  <td>
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value="${
-                                        item?.id
-                                      }"
-                      id=""
-                      onChange="handleOnSelect(this)"
-                    />
-                    {item.bucketList}
-                  </td>
+                  <td>{item.bucketList}</td>
                   <td>{item.money}</td>
                   <td className="text-end">
                     <button
