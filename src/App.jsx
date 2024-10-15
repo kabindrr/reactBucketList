@@ -8,7 +8,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import "react-toastify/dist/ReactToastify.css";
-import { getBucket, postBucket, updateBucket } from "./helpers/taskAxios";
+import {
+  deleteBucket,
+  getBucket,
+  postBucket,
+  updateBucket,
+} from "./helpers/taskAxios";
 const totalBudget = 24000;
 
 const App = () => {
@@ -20,6 +25,11 @@ const App = () => {
     return acc + Number(item.money);
   }, 0);
 
+  const [toDelete, setToDelete] = useState([]);
+  const entryList = (bucketList || []).filter((item) => item.type === "entry");
+
+  const badList = (bucketList || []).filter((item) => item.type === "bad");
+
   useEffect(() => {
     //load all bucket at the beginning
     shouldFetchRef.current && getAllBuckets();
@@ -27,6 +37,9 @@ const App = () => {
   }, []);
 
   const addBucketList = async (taskObj) => {
+    if (totalMoney + +taskObj.money > totalBudget) {
+      return alert("Sorry not enough budget");
+    }
     setShowModal(true);
 
     setTimeout(async () => {
@@ -55,10 +68,16 @@ const App = () => {
     }
   };
 
-  const handleOnDelete = (idstoDelete) => {
+  const handleOnDelete = async (idstoDelete) => {
     if (window.confirm("Are you sure you want to Delete the bucket list??")) {
       //to do delete
-      console.log(idstoDelete);
+      const response = await deleteBucket(idstoDelete);
+      if (response.status === "success") {
+        getAllBuckets();
+        setToDelete([]);
+      }
+
+      //empty the delete state
     }
   };
 
@@ -70,6 +89,37 @@ const App = () => {
     //mount and show to the table
     if (response?.status === "success") {
       setBucketList(response.bucketList);
+    }
+  };
+  const handleOnSelect = (e) => {
+    const { checked, value } = e.target;
+
+    let tempArg = [];
+    if (value === "allEntry") {
+      tempArg = entryList;
+    }
+    if (value === "allBad") {
+      tempArg = badList;
+    }
+
+    if (checked) {
+      if (value === "allEntry" || value === "allBad") {
+        //get all ids from entry list
+        const _ids = tempArg.map((item) => item._id);
+        const uniqueIds = [...new Set([...toDelete, ..._ids])];
+        setToDelete(uniqueIds);
+        return;
+      }
+      setToDelete([...toDelete, value]);
+    } else {
+      if (value === "allEntry" || value === "allBad") {
+        const _ids = tempArg.map((item) => item._id);
+
+        setToDelete(toDelete.filter((_id) => !_ids.includes(_id)));
+        return;
+      }
+
+      setToDelete(toDelete.filter((_id) => _id !== value));
     }
   };
 
@@ -173,6 +223,10 @@ const App = () => {
             bucketList={bucketList}
             handleOnSwitch={handleOnSwitch}
             handleOnDelete={handleOnDelete}
+            toDelete={toDelete}
+            handleOnSelect={handleOnSelect}
+            entryList={entryList}
+            badList={badList}
           />
           <div className="alert alert-danger">
             Totoal money Spent On Holidays{" "}

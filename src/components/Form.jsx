@@ -43,6 +43,7 @@ export const Form = ({ addBucketList }) => {
               id="exampleFormControlInput1"
               placeholder="Money Reqired"
               min="100"
+              max="5000"
               value={form.money ?? ""}
               onChange={handleOnChange}
             />

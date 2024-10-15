@@ -1,44 +1,15 @@
 import { Button } from "bootstrap";
 import { useState } from "react";
 
-export const Table = ({ bucketList, handleOnSwitch, handleOnDelete }) => {
-  const [toDelete, setToDelete] = useState([]);
-  const entryList = (bucketList || []).filter((item) => item.type === "entry");
-
-  const badList = (bucketList || []).filter((item) => item.type === "bad");
-
-  const handleOnSelect = (e) => {
-    const { checked, value } = e.target;
-
-    let tempArg = [];
-    if (value === "allEntry") {
-      tempArg = entryList;
-    }
-    if (value === "allBad") {
-      tempArg = badList;
-    }
-
-    if (checked) {
-      if (value === "allEntry" || value === "allBad") {
-        //get all ids from entry list
-        const _ids = tempArg.map((item) => item._id);
-        const uniqueIds = [...new Set([...toDelete, ..._ids])];
-        setToDelete(uniqueIds);
-        return;
-      }
-      setToDelete([...toDelete, value]);
-    } else {
-      if (value === "allEntry" || value === "allBad") {
-        const _ids = tempArg.map((item) => item._id);
-
-        setToDelete(toDelete.filter((_id) => !_ids.includes(_id)));
-        return;
-      }
-
-      setToDelete(toDelete.filter((_id) => _id !== value));
-    }
-  };
-  console.log(toDelete);
+export const Table = ({
+  bucketList,
+  handleOnSwitch,
+  handleOnDelete,
+  handleOnSelect,
+  toDelete,
+  entryList,
+  badList,
+}) => {
   return (
     <>
       <div className="row mt-5" style={{ color: "red" }}>
