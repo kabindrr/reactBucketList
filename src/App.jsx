@@ -56,7 +56,7 @@ const App = () => {
       setShowModal(false);
 
       toast.success("On your way to new Bucket");
-    }, 2000);
+    }, 1000);
   };
 
   const handleOnSwitch = async (_id, type) => {
@@ -69,22 +69,30 @@ const App = () => {
   };
 
   const handleOnDelete = async (idstoDelete) => {
-    if (window.confirm("Are you sure you want to Delete the bucket list??")) {
-      //to do delete
-      const response = await deleteBucket(idstoDelete);
-      if (response.status === "success") {
-        getAllBuckets();
-        setToDelete([]);
-      }
+    if (window.confirm("Are you sure you want to Delete the bucket list?")) {
+      try {
+        const response = await deleteBucket(idstoDelete);
+        if (response.status === "success") {
+          // Clear the selection state after successful deletion
+          setToDelete([]);
 
-      //empty the delete state
+          // Re-fetch the updated bucket list
+          getAllBuckets();
+          toast.success("Bucket list deleted successfully");
+        } else {
+          toast.error("Failed to delete the bucket list");
+        }
+      } catch (error) {
+        toast.error("Error while deleting, please try again.");
+        console.error("Error:", error);
+      }
     }
   };
 
   const getAllBuckets = async () => {
     //fetch all buckets from server
     const response = await getBucket();
-    console.log(response);
+    console.log(100, response.bucketList);
 
     //mount and show to the table
     if (response?.status === "success") {

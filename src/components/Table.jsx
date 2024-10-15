@@ -2,7 +2,6 @@ import { Button } from "bootstrap";
 import { useState } from "react";
 
 export const Table = ({
-  bucketList,
   handleOnSwitch,
   handleOnDelete,
   handleOnSelect,
