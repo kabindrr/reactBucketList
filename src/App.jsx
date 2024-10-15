@@ -26,15 +26,19 @@ const App = () => {
     shouldFetchRef.current = false;
   }, []);
 
-  const addBucketList = (taskObj) => {
+  const addBucketList = async (taskObj) => {
     setShowModal(true);
 
-    setTimeout(() => {
+    setTimeout(async () => {
       const obj = {
         ...taskObj,
       };
 
-      const response = postBucket(obj);
+      const response = await postBucket(obj);
+      console.log(response);
+      if (response.status === "success") {
+        getAllBuckets();
+      }
 
       setShowModal(false);
 
@@ -66,7 +70,6 @@ const App = () => {
     //mount and show to the table
     if (response?.status === "success") {
       setBucketList(response.bucketList);
-      console.log("updated bucket list", response.bucketList);
     }
   };
 
