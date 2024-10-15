@@ -8,6 +8,7 @@ export const apiProcessor = async (axiosObj) => {
       url,
       data,
     });
+    console.log(response);
     return response.data;
   } catch (error) {
     return {

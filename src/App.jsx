@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { Form } from "./components/Form";
 import { Button, Modal, Spinner } from "react-bootstrap";
@@ -8,15 +8,23 @@ import { ToastContainer, toast } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import "react-toastify/dist/ReactToastify.css";
+import { getBucket, postBucket, updateBucket } from "./helpers/taskAxios";
 const totalBudget = 24000;
 
 const App = () => {
   const [showModal, setShowModal] = useState(false);
   const [bucketList, setBucketList] = useState([]);
+  const shouldFetchRef = useRef(true);
 
-  const totalMoney = bucketList.reduce((acc, item) => {
+  const totalMoney = (bucketList || []).reduce((acc, item) => {
     return acc + Number(item.money);
   }, 0);
+
+  useEffect(() => {
+    //load all bucket at the beginning
+    shouldFetchRef.current && getAllBuckets();
+    shouldFetchRef.current = false;
+  }, []);
 
   const addBucketList = (taskObj) => {
     setShowModal(true);
@@ -24,52 +32,41 @@ const App = () => {
     setTimeout(() => {
       const obj = {
         ...taskObj,
-        id: randomIdGenerator(),
-        type: "entry",
       };
-      if (totalMoney + Number(taskObj.money) > totalBudget) {
-        setShowModal(false);
-        return toast.error(
-          "Not enough Budget available. Let go of some holiday destination"
-        );
-      }
 
-      setBucketList([...bucketList, obj]);
+      const response = postBucket(obj);
+
       setShowModal(false);
 
       toast.success("On your way to new Bucket");
-    }, 3000);
+    }, 2000);
   };
 
-  const randomIdGenerator = () => {
-    const str =
-      "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
-
-    let id = "";
-
-    for (let i = 0; i < 6; i++) {
-      const randomIndex = Math.floor(Math.random() * str.length);
-
-      id += str[randomIndex];
-    }
-    return id;
-  };
-
-  const handleOnSwitch = (id, type) => {
-    const temArg = bucketList.map((item) => {
-      if (item.id === id) {
-        item.type = type;
-      }
-      return item;
-    });
-    setBucketList(temArg);
+  const handleOnSwitch = async (_id, type) => {
+    const response = await updateBucket({ _id, type });
     toast.info(`Bucket list item switched to ${type}`);
+    if (response.status === "success") {
+      //refetch all tasks
+      getAllBuckets();
+    }
   };
 
-  const handleOnDelete = (id) => {
+  const handleOnDelete = (_id) => {
     if (window.confirm("Are you sure you want to Delete the bucket list??")) {
-      setBucketList(bucketList.filter((item) => item.id !== id));
+      //to do delete
       toast.error("Your bucket list has been deleted");
+    }
+  };
+
+  const getAllBuckets = async () => {
+    //fetch all buckets from server
+    const response = await getBucket();
+    console.log(response);
+
+    //mount and show to the table
+    if (response?.status === "success") {
+      setBucketList(response.bucketList);
+      console.log("updated bucket list", response.bucketList);
     }
   };
 

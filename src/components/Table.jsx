@@ -1,7 +1,7 @@
 export const Table = ({ bucketList, handleOnSwitch, handleOnDelete }) => {
-  const entryList = bucketList.filter((item) => item.type === "entry");
+  const entryList = (bucketList || []).filter((item) => item.type === "entry");
 
-  const badList = bucketList.filter((item) => item.type === "bad");
+  const badList = (bucketList || []).filter((item) => item.type === "bad");
 
   return (
     <>
@@ -29,7 +29,7 @@ export const Table = ({ bucketList, handleOnSwitch, handleOnDelete }) => {
               {entryList.map((item, i) => {
                 return (
                   <tr
-                    key={item.id}
+                    key={item._id}
                     className=""
                     style={{ border: "2px solid red" }}
                   >
@@ -38,13 +38,13 @@ export const Table = ({ bucketList, handleOnSwitch, handleOnDelete }) => {
                     <td>{item.money}</td>
                     <td className="text-end">
                       <button
-                        onClick={() => handleOnDelete(item.id)}
+                        onClick={() => handleOnDelete(item._id)}
                         className="btn btn-danger"
                       >
                         <i className="fa-solid fa-trash-can"></i>
                       </button>
                       <button
-                        onClick={() => handleOnSwitch(item.id, "bad")}
+                        onClick={() => handleOnSwitch(item._id, "bad")}
                         className="btn btn-success"
                       >
                         <i className="fa-solid fa-arrow-right"></i>
@@ -76,7 +76,7 @@ export const Table = ({ bucketList, handleOnSwitch, handleOnDelete }) => {
             <tbody id="badList">
               {badList.map((item, i) => (
                 <tr
-                  key={item.id}
+                  key={item._id}
                   className=""
                   style={{ border: "2px solid red" }}
                 >
@@ -86,14 +86,14 @@ export const Table = ({ bucketList, handleOnSwitch, handleOnDelete }) => {
                   <td className="text-end">
                     <button
                       onClick={() => {
-                        handleOnDelete(item.id);
+                        handleOnDelete(item._id);
                       }}
                       className="btn btn-danger"
                     >
                       <i className="fa-solid fa-trash-can"></i>
                     </button>
                     <button
-                      onClick={() => handleOnSwitch(item.id, "entry")}
+                      onClick={() => handleOnSwitch(item._id, "entry")}
                       className="btn btn-warning"
                     >
                       <i className="fa-solid fa-arrow-left"></i>

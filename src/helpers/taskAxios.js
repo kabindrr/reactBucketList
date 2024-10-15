@@ -29,9 +29,9 @@ export const getBucket = (obj) => {
   return apiProcessor(axiosObj);
 };
 
-export const putBucket = (obj) => {
+export const updateBucket = (obj) => {
   const axiosObj = {
-    method: "PUT",
+    method: "PATCH",
     url: apiEP,
     data: obj,
   };
