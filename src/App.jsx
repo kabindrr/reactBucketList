@@ -55,10 +55,10 @@ const App = () => {
     }
   };
 
-  const handleOnDelete = (_id) => {
+  const handleOnDelete = (idstoDelete) => {
     if (window.confirm("Are you sure you want to Delete the bucket list??")) {
       //to do delete
-      toast.error("Your bucket list has been deleted");
+      console.log(idstoDelete);
     }
   };
 
