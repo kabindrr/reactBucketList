@@ -1,6 +1,6 @@
 import { apiProcessor } from "./axios";
 
-const apiEP = "http://localhost:8020/api/v1/bucketList";
+const apiEP = "http://localhost:3001/api/v1/bucketList";
 
 export const addBucket = (obj) => {
   const axiosObj = {
