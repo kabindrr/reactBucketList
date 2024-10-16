@@ -1,6 +1,6 @@
 import { apiProcessor } from "./axios";
 
-const apiEP = import.meta.env.NODE_ENV
+const apiEP = import.meta.env.PROD
   ? "/api/v1/bucketList"
   : "http://localhost:3001/api/v1/bucketList";
 
