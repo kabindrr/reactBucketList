@@ -78,7 +78,7 @@ const App = () => {
 
           // Re-fetch the updated bucket list
           getAllBuckets();
-          toast.success("Bucket list deleted successfully");
+          toast.error("Bucket list deleted successfully");
         } else {
           toast.error("Failed to delete the bucket list");
         }
